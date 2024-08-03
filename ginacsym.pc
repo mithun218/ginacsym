@@ -1,0 +1,11 @@
+prefix=/F/ginacsym_dependencies/opt
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: ginacsym
+Description: C++ library for symbolic calculations
+Version: 1.0.0
+Requires: cln >= 1.3.4 flint >=3.0.0
+Libs: -L${libdir} -lginacsym -L${libdir}
+Cflags: -I${includedir}
