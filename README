@@ -79,7 +79,7 @@ In contrast to GiNaC, GinacSym has the following additional features:
 integral functions (sinIntegral, cosIntegral, sinhIntegral, coshIntegral, logIntegral, expIntegralE, expIntegralEi), Chebyshev T polynomial, Chebyshev U polynomial, Legendre P polynomial, Legendre Q (second kind), Hermite polynomial, Gegenbauer (ultraspherical) polynomial, Bessel J function (first kind), Bessel Y function (second kind), Modified Bessel functions (first kind), Modified Bessel functions (second kind).
 
 ## Documentation
-For in-depth documentation [click here.](https://rawcdn.githack.com/mithun218/ginacsym/db189a107e142860dd9434adbbb30d9376e67463/doc/html/documentation/ginacsym/ginacsymtoc.html)
+For in-depth documentation please see at http://htmlpreview.github.io/?https://github.com/mithun218/ginacsym/doc/html/index.html
 
 ## To do
 
