@@ -2496,23 +2496,23 @@ struct normal_map_function : public map_function {
  *  @see ex::normal */
 ex basic::normal(exmap & repl, exmap & rev_lookup, lst & modifier) const
 {
-	if (nops() == 0)
-		return dynallocate<lst>({replace_with_symbol(*this, repl, rev_lookup, modifier), _ex1});
+    if (nops() == 0)
+        return dynallocate<lst>({replace_with_symbol(*this, repl, rev_lookup, modifier), _ex1});
 
-	normal_map_function map_normal;
-	size_t nmod = modifier.nops(); // To watch new modifiers to the replacement list
-	ex result = replace_with_symbol(map(map_normal), repl, rev_lookup, modifier);
-	for (size_t imod = nmod; imod < modifier.nops(); ++imod) {
-		exmap this_repl;
-		this_repl.insert(std::make_pair(modifier.op(imod).op(0), modifier.op(imod).op(1)));
-		result = result.subs(this_repl, subs_options::no_pattern);
-	}
+    normal_map_function map_normal;
+    size_t nmod = modifier.nops(); // To watch new modifiers to the replacement list
+    ex result = replace_with_symbol(map(map_normal), repl, rev_lookup, modifier);
+    for (size_t imod = nmod; imod < modifier.nops(); ++imod) {
+        exmap this_repl;
+        this_repl.insert(std::make_pair(modifier.op(imod).op(0), modifier.op(imod).op(1)));
+        result = result.subs(this_repl, subs_options::no_pattern);
+    }
 
-	// Sometimes we may obtain negative powers, they need to be placed to denominator
-	if (is_a<power>(result) && result.op(1).info(info_flags::negative))
-		return dynallocate<lst>({_ex1, power(result.op(0), -result.op(1))});
-	else
-		return dynallocate<lst>({result, _ex1});
+    // Sometimes we may obtain negative powers, they need to be placed to denominator
+    if (is_a<power>(result) && result.op(1).info(info_flags::negative))
+        return dynallocate<lst>({_ex1, power(result.op(0), -result.op(1))});
+    else
+        return dynallocate<lst>({result, _ex1});
 }
 
 
@@ -2520,7 +2520,7 @@ ex basic::normal(exmap & repl, exmap & rev_lookup, lst & modifier) const
  *  @see ex::normal */
 ex symbol::normal(exmap & repl, exmap & rev_lookup, lst & modifier) const
 {
-	return dynallocate<lst>({*this, _ex1});
+    return dynallocate<lst>({*this, _ex1});
 }
 
 
@@ -2530,21 +2530,21 @@ ex symbol::normal(exmap & repl, exmap & rev_lookup, lst & modifier) const
  *  @see ex::normal */
 ex numeric::normal(exmap & repl, exmap & rev_lookup, lst & modifier) const
 {
-	numeric num = numer();
-	ex numex = num;
+    numeric num = numer();
+    ex numex = num;
 
-	if (num.is_real()) {
-		if (!num.is_integer())
-			numex = replace_with_symbol(numex, repl, rev_lookup, modifier);
-	} else { // complex
-		numeric re = num.real(), im = num.imag();
-		ex re_ex = re.is_rational() ? re : replace_with_symbol(re, repl, rev_lookup, modifier);
-		ex im_ex = im.is_rational() ? im : replace_with_symbol(im, repl, rev_lookup, modifier);
-		numex = re_ex + im_ex * replace_with_symbol(I, repl, rev_lookup, modifier);
-	}
+    if (num.is_real()) {
+        if (!num.is_integer())
+            numex = replace_with_symbol(numex, repl, rev_lookup, modifier);
+    } else { // complex
+        numeric re = num.real(), im = num.imag();
+        ex re_ex = re.is_rational() ? re : replace_with_symbol(re, repl, rev_lookup, modifier);
+        ex im_ex = im.is_rational() ? im : replace_with_symbol(im, repl, rev_lookup, modifier);
+        numex = re_ex + im_ex * replace_with_symbol(I, repl, rev_lookup, modifier);
+    }
 
-	// Denominator is always a real integer (see numeric::denom())
-	return dynallocate<lst>({numex, denom()});
+    // Denominator is always a real integer (see numeric::denom())
+    return dynallocate<lst>({numex, denom()});
 }
 
 
@@ -2554,58 +2554,58 @@ ex numeric::normal(exmap & repl, exmap & rev_lookup, lst & modifier) const
  *  @return cancelled fraction {n, d} as a list */
 static ex frac_cancel(const ex &n, const ex &d)
 {
-	ex num = n;
-	ex den = d;
-	numeric pre_factor = *_num1_p;
+    ex num = n;
+    ex den = d;
+    numeric pre_factor = *_num1_p;
 
 //std::clog << "frac_cancel num = " << num << ", den = " << den << std::endl;
 
-	// Handle trivial case where denominator is 1
-	if (den.is_equal(_ex1))
-		return dynallocate<lst>({num, den});
+    // Handle trivial case where denominator is 1
+    if (den.is_equal(_ex1))
+        return dynallocate<lst>({num, den});
 
-	// Handle special cases where numerator or denominator is 0
-	if (num.is_zero())
-		return dynallocate<lst>({num, _ex1});
-	if (den.expand().is_zero())
-		throw(std::overflow_error("frac_cancel: division by zero in frac_cancel"));
+    // Handle special cases where numerator or denominator is 0
+    if (num.is_zero())
+        return dynallocate<lst>({num, _ex1});
+    if (den.expand().is_zero())
+        throw(std::overflow_error("frac_cancel: division by zero in frac_cancel"));
 
-	// Bring numerator and denominator to Z[X] by multiplying with
-	// LCM of all coefficients' denominators
-	numeric num_lcm = lcm_of_coefficients_denominators(num);
-	numeric den_lcm = lcm_of_coefficients_denominators(den);
-	num = multiply_lcm(num, num_lcm);
-	den = multiply_lcm(den, den_lcm);
-	pre_factor = den_lcm / num_lcm;
+    // Bring numerator and denominator to Z[X] by multiplying with
+    // LCM of all coefficients' denominators
+    numeric num_lcm = lcm_of_coefficients_denominators(num);
+    numeric den_lcm = lcm_of_coefficients_denominators(den);
+    num = multiply_lcm(num, num_lcm);
+    den = multiply_lcm(den, den_lcm);
+    pre_factor = den_lcm / num_lcm;
 
-	// Cancel GCD from numerator and denominator
-	ex cnum, cden;
-	if (gcd(num, den, &cnum, &cden, false) != _ex1) {
-		num = cnum;
-		den = cden;
-	}
+    // Cancel GCD from numerator and denominator
+    ex cnum, cden;
+    if (gcd(num, den, &cnum, &cden, false) != _ex1) {
+        num = cnum;
+        den = cden;
+    }
 
-	// Make denominator unit normal (i.e. coefficient of first symbol
-	// as defined by get_first_symbol() is made positive)
-	if (is_exactly_a<numeric>(den)) {
-		if (ex_to<numeric>(den).is_negative()) {
-			num *= _ex_1;
-			den *= _ex_1;
-		}
-	} else {
-		ex x;
-		if (get_first_symbol(den, x)) {
-			GINAC_ASSERT(is_exactly_a<numeric>(den.unit(x)));
-			if (ex_to<numeric>(den.unit(x)).is_negative()) {
-				num *= _ex_1;
-				den *= _ex_1;
-			}
-		}
-	}
+    // Make denominator unit normal (i.e. coefficient of first symbol
+    // as defined by get_first_symbol() is made positive)
+    if (is_exactly_a<numeric>(den)) {
+        if (ex_to<numeric>(den).is_negative()) {
+            num *= _ex_1;
+            den *= _ex_1;
+        }
+    } else {
+        ex x;
+        if (get_first_symbol(den, x)) {
+            GINAC_ASSERT(is_exactly_a<numeric>(den.unit(x)));
+            if (ex_to<numeric>(den.unit(x)).is_negative()) {
+                num *= _ex_1;
+                den *= _ex_1;
+            }
+        }
+    }
 
-	// Return result as list
+    // Return result as list
 //std::clog << " returns num = " << num << ", den = " << den << ", pre_factor = " << pre_factor << std::endl;
-	return dynallocate<lst>({num * pre_factor.numer(), den * pre_factor.denom()});
+    return dynallocate<lst>({num * pre_factor.numer(), den * pre_factor.denom()});
 }
 
 
@@ -2614,63 +2614,63 @@ static ex frac_cancel(const ex &n, const ex &d)
  *  @see ex::normal */
 ex add::normal(exmap & repl, exmap & rev_lookup, lst & modifier) const
 {
-	// Normalize children and split each one into numerator and denominator
-	exvector nums, dens;
-	nums.reserve(seq.size()+1);
-	dens.reserve(seq.size()+1);
-	size_t nmod = modifier.nops(); // To watch new modifiers to the replacement list
-	for (auto & it : seq) {
-		ex n = ex_to<basic>(recombine_pair_to_ex(it)).normal(repl, rev_lookup, modifier);
-		nums.push_back(n.op(0));
-		dens.push_back(n.op(1));
-	}
-	ex n = ex_to<numeric>(overall_coeff).normal(repl, rev_lookup, modifier);
-	nums.push_back(n.op(0));
-	dens.push_back(n.op(1));
-	GINAC_ASSERT(nums.size() == dens.size());
+    // Normalize children and split each one into numerator and denominator
+    exvector nums, dens;
+    nums.reserve(seq.size()+1);
+    dens.reserve(seq.size()+1);
+    size_t nmod = modifier.nops(); // To watch new modifiers to the replacement list
+    for (auto & it : seq) {
+        ex n = ex_to<basic>(recombine_pair_to_ex(it)).normal(repl, rev_lookup, modifier);
+        nums.push_back(n.op(0));
+        dens.push_back(n.op(1));
+    }
+    ex n = ex_to<numeric>(overall_coeff).normal(repl, rev_lookup, modifier);
+    nums.push_back(n.op(0));
+    dens.push_back(n.op(1));
+    GINAC_ASSERT(nums.size() == dens.size());
 
-	// Now, nums is a vector of all numerators and dens is a vector of
-	// all denominators
+    // Now, nums is a vector of all numerators and dens is a vector of
+    // all denominators
 //std::clog << "add::normal uses " << nums.size() << " summands:\n";
 
-	// Add fractions sequentially
-	auto num_it = nums.begin(), num_itend = nums.end();
-	auto den_it = dens.begin(), den_itend = dens.end();
+    // Add fractions sequentially
+    auto num_it = nums.begin(), num_itend = nums.end();
+    auto den_it = dens.begin(), den_itend = dens.end();
 //std::clog << " num = " << *num_it << ", den = " << *den_it << std::endl;
-	for (size_t imod = nmod; imod < modifier.nops(); ++imod) {
-		while (num_it != num_itend) {
-			*num_it = num_it->subs(modifier.op(imod), subs_options::no_pattern);
-			++num_it;
-			*den_it = den_it->subs(modifier.op(imod), subs_options::no_pattern);
-			++den_it;
-		}
-		// Reset iterators for the next round
-		num_it = nums.begin();
-		den_it = dens.begin();
-	}
+    for (size_t imod = nmod; imod < modifier.nops(); ++imod) {
+        while (num_it != num_itend) {
+            *num_it = num_it->subs(modifier.op(imod), subs_options::no_pattern);
+            ++num_it;
+            *den_it = den_it->subs(modifier.op(imod), subs_options::no_pattern);
+            ++den_it;
+        }
+        // Reset iterators for the next round
+        num_it = nums.begin();
+        den_it = dens.begin();
+    }
 
-	ex num = *num_it++, den = *den_it++;
-	while (num_it != num_itend) {
+    ex num = *num_it++, den = *den_it++;
+    while (num_it != num_itend) {
 //std::clog << " num = " << *num_it << ", den = " << *den_it << std::endl;
-		ex next_num = *num_it++, next_den = *den_it++;
+        ex next_num = *num_it++, next_den = *den_it++;
 
-		// Trivially add sequences of fractions with identical denominators
-		while ((den_it != den_itend) && next_den.is_equal(*den_it)) {
-			next_num += *num_it;
-			num_it++; den_it++;
-		}
+        // Trivially add sequences of fractions with identical denominators
+        while ((den_it != den_itend) && next_den.is_equal(*den_it)) {
+            next_num += *num_it;
+            num_it++; den_it++;
+        }
 
-		// Addition of two fractions, taking advantage of the fact that
-		// the heuristic GCD algorithm computes the cofactors at no extra cost
-		ex co_den1, co_den2;
-		ex g = gcd(den, next_den, &co_den1, &co_den2, false);
-		num = ((num * co_den2) + (next_num * co_den1)).expand();
-		den *= co_den2;		// this is the lcm(den, next_den)
-	}
+        // Addition of two fractions, taking advantage of the fact that
+        // the heuristic GCD algorithm computes the cofactors at no extra cost
+        ex co_den1, co_den2;
+        ex g = gcd(den, next_den, &co_den1, &co_den2, false);
+        num = ((num * co_den2) + (next_num * co_den1)).expand();
+        den *= co_den2;		// this is the lcm(den, next_den)
+    }
 //std::clog << " common denominator = " << den << std::endl;
 
-	// Cancel common factors from num/den
-	return frac_cancel(num, den);
+    // Cancel common factors from num/den
+    return frac_cancel(num, den);
 }
 
 
@@ -2679,34 +2679,34 @@ ex add::normal(exmap & repl, exmap & rev_lookup, lst & modifier) const
  *  @see ex::normal() */
 ex mul::normal(exmap & repl, exmap & rev_lookup, lst & modifier) const
 {
-	// Normalize children, separate into numerator and denominator
-	exvector num; num.reserve(seq.size());
-	exvector den; den.reserve(seq.size());
-	ex n;
-	size_t nmod = modifier.nops(); // To watch new modifiers to the replacement list
-	for (auto & it : seq) {
-		n = ex_to<basic>(recombine_pair_to_ex(it)).normal(repl, rev_lookup, modifier);
-		num.push_back(n.op(0));
-		den.push_back(n.op(1));
-	}
-	n = ex_to<numeric>(overall_coeff).normal(repl, rev_lookup, modifier);
-	num.push_back(n.op(0));
-	den.push_back(n.op(1));
-	auto num_it = num.begin(), num_itend = num.end();
-	auto den_it = den.begin();
-	for (size_t imod = nmod; imod < modifier.nops(); ++imod) {
-		while (num_it != num_itend) {
-			*num_it = num_it->subs(modifier.op(imod), subs_options::no_pattern);
-			++num_it;
-			*den_it = den_it->subs(modifier.op(imod), subs_options::no_pattern);
-			++den_it;
-		}
-		num_it = num.begin();
-		den_it = den.begin();
-	}
+    // Normalize children, separate into numerator and denominator
+    exvector num; num.reserve(seq.size());
+    exvector den; den.reserve(seq.size());
+    ex n;
+    size_t nmod = modifier.nops(); // To watch new modifiers to the replacement list
+    for (auto & it : seq) {
+        n = ex_to<basic>(recombine_pair_to_ex(it)).normal(repl, rev_lookup, modifier);
+        num.push_back(n.op(0));
+        den.push_back(n.op(1));
+    }
+    n = ex_to<numeric>(overall_coeff).normal(repl, rev_lookup, modifier);
+    num.push_back(n.op(0));
+    den.push_back(n.op(1));
+    auto num_it = num.begin(), num_itend = num.end();
+    auto den_it = den.begin();
+    for (size_t imod = nmod; imod < modifier.nops(); ++imod) {
+        while (num_it != num_itend) {
+            *num_it = num_it->subs(modifier.op(imod), subs_options::no_pattern);
+            ++num_it;
+            *den_it = den_it->subs(modifier.op(imod), subs_options::no_pattern);
+            ++den_it;
+        }
+        num_it = num.begin();
+        den_it = den.begin();
+    }
 
-	// Perform fraction cancellation
-	return frac_cancel(dynallocate<mul>(num), dynallocate<mul>(den));
+    // Perform fraction cancellation
+    return frac_cancel(dynallocate<mul>(num), dynallocate<mul>(den));
 }
 
 
@@ -2716,55 +2716,55 @@ ex mul::normal(exmap & repl, exmap & rev_lookup, lst & modifier) const
  *  @see ex::normal */
 ex power::normal(exmap & repl, exmap & rev_lookup, lst & modifier) const
 {
-	// Normalize basis and exponent (exponent gets reassembled)
-	size_t nmod = modifier.nops(); // To watch new modifiers to the replacement list
-	ex n_basis = ex_to<basic>(basis).normal(repl, rev_lookup, modifier);
-	for (size_t imod = nmod; imod < modifier.nops(); ++imod)
-		n_basis = n_basis.subs(modifier.op(imod), subs_options::no_pattern);
+    // Normalize basis and exponent (exponent gets reassembled)
+    size_t nmod = modifier.nops(); // To watch new modifiers to the replacement list
+    ex n_basis = ex_to<basic>(basis).normal(repl, rev_lookup, modifier);
+    for (size_t imod = nmod; imod < modifier.nops(); ++imod)
+        n_basis = n_basis.subs(modifier.op(imod), subs_options::no_pattern);
 
-	nmod = modifier.nops();
-	ex n_exponent = ex_to<basic>(exponent).normal(repl, rev_lookup, modifier);
-	for (size_t imod = nmod; imod < modifier.nops(); ++imod)
-		n_exponent = n_exponent.subs(modifier.op(imod), subs_options::no_pattern);
-	n_exponent = n_exponent.op(0) / n_exponent.op(1);
+    nmod = modifier.nops();
+    ex n_exponent = ex_to<basic>(exponent).normal(repl, rev_lookup, modifier);
+    for (size_t imod = nmod; imod < modifier.nops(); ++imod)
+        n_exponent = n_exponent.subs(modifier.op(imod), subs_options::no_pattern);
+    n_exponent = n_exponent.op(0) / n_exponent.op(1);
 
-	if (n_exponent.info(info_flags::integer)) {
+    if (n_exponent.info(info_flags::integer)) {
 
-		if (n_exponent.info(info_flags::positive)) {
+        if (n_exponent.info(info_flags::positive)) {
 
-			// (a/b)^n -> {a^n, b^n}
-			return dynallocate<lst>({pow(n_basis.op(0), n_exponent), pow(n_basis.op(1), n_exponent)});
+            // (a/b)^n -> {a^n, b^n}
+            return dynallocate<lst>({pow(n_basis.op(0), n_exponent), pow(n_basis.op(1), n_exponent)});
 
-		} else if (n_exponent.info(info_flags::negative)) {
+        } else if (n_exponent.info(info_flags::negative)) {
 
-			// (a/b)^-n -> {b^n, a^n}
-			return dynallocate<lst>({pow(n_basis.op(1), -n_exponent), pow(n_basis.op(0), -n_exponent)});
-		}
+            // (a/b)^-n -> {b^n, a^n}
+            return dynallocate<lst>({pow(n_basis.op(1), -n_exponent), pow(n_basis.op(0), -n_exponent)});
+        }
 
-	} else {
+    } else {
 
-		if (n_exponent.info(info_flags::positive)) {
+        if (n_exponent.info(info_flags::positive)) {
 
-			// (a/b)^x -> {sym((a/b)^x), 1}
-			return dynallocate<lst>({replace_with_symbol(pow(n_basis.op(0) / n_basis.op(1), n_exponent), repl, rev_lookup, modifier), _ex1});
+            // (a/b)^x -> {sym((a/b)^x), 1}
+            return dynallocate<lst>({replace_with_symbol(pow(n_basis.op(0) / n_basis.op(1), n_exponent), repl, rev_lookup, modifier), _ex1});
 
-		} else if (n_exponent.info(info_flags::negative)) {
+        } else if (n_exponent.info(info_flags::negative)) {
 
-			if (n_basis.op(1).is_equal(_ex1)) {
+            if (n_basis.op(1).is_equal(_ex1)) {
 
-				// a^-x -> {1, sym(a^x)}
-				return dynallocate<lst>({_ex1, replace_with_symbol(pow(n_basis.op(0), -n_exponent), repl, rev_lookup, modifier)});
+                // a^-x -> {1, sym(a^x)}
+                return dynallocate<lst>({_ex1, replace_with_symbol(pow(n_basis.op(0), -n_exponent), repl, rev_lookup, modifier)});
 
-			} else {
+            } else {
 
-				// (a/b)^-x -> {sym((b/a)^x), 1}
-				return dynallocate<lst>({replace_with_symbol(pow(n_basis.op(1) / n_basis.op(0), -n_exponent), repl, rev_lookup, modifier), _ex1});
-			}
-		}
-	}
+                // (a/b)^-x -> {sym((b/a)^x), 1}
+                return dynallocate<lst>({replace_with_symbol(pow(n_basis.op(1) / n_basis.op(0), -n_exponent), repl, rev_lookup, modifier), _ex1});
+            }
+        }
+    }
 
-	// (a/b)^x -> {sym((a/b)^x, 1}
-	return dynallocate<lst>({replace_with_symbol(pow(n_basis.op(0) / n_basis.op(1), n_exponent), repl, rev_lookup, modifier), _ex1});
+    // (a/b)^x -> {sym((a/b)^x, 1}
+    return dynallocate<lst>({replace_with_symbol(pow(n_basis.op(0) / n_basis.op(1), n_exponent), repl, rev_lookup, modifier), _ex1});
 }
 
 
@@ -2773,26 +2773,30 @@ ex power::normal(exmap & repl, exmap & rev_lookup, lst & modifier) const
  *  @see ex::normal */
 ex pseries::normal(exmap & repl, exmap & rev_lookup, lst & modifier) const
 {
-	epvector newseq;
-	for (auto & it : seq) {
-		ex restexp = it.rest.normal();
-		if (!restexp.is_zero())
-			newseq.push_back(expair(restexp, it.coeff));
-	}
-	ex n = pseries(relational(var,point), std::move(newseq));
-	return dynallocate<lst>({replace_with_symbol(n, repl, rev_lookup, modifier), _ex1});
+    epvector newseq;
+    for (auto & it : seq) {
+        ex restexp = it.rest.normal();
+        if (!restexp.is_zero())
+            newseq.push_back(expair(restexp, it.coeff));
+    }
+    ex n = pseries(relational(var,point), std::move(newseq));
+    return dynallocate<lst>({replace_with_symbol(n, repl, rev_lookup, modifier), _ex1});
 }
 
 //by me
 ex function::normal(exmap & repl, exmap & rev_lookup,  lst & modifier) const
 {
     if (get_serial() == exp_SERIAL::serial
-        && (op(0)).nops()>=2 && op(0).op(op(0).nops()-1).info(info_flags::negative)) {//it implements numer_denom(exp(-x))={1,exp(x)}
+        && is_a<mul>(op(0)) && (op(0).op(op(0).nops()-1)).info(info_flags::integer)) {//it implements numer_denom(exp(-x))={1,exp(x)}
         ginacsym::power p(replace_exp_with_symbol(op(0)/(op(0).op(op(0).nops()-1)),repl_E), op(0).op(op(0).nops()-1));
         return p.normal(repl, rev_lookup, modifier);
     }
+    else if (get_serial() == exp_SERIAL::serial
+             && (op(0)).nops()==0) {//it implements numer_denom(exp(-x))={1,exp(x)}
+        ginacsym::power p(replace_exp_with_symbol(op(0),repl_E), _ex1);
+        return p.normal(repl, rev_lookup, modifier);
+    }
     else if(!is_number(*this)) {
-
         normal_map_function map_normal;
         size_t nmod = modifier.nops(); // To watch new modifiers to the replacement list
         ex result = replace_with_symbol(map(map_normal), repl, rev_lookup, modifier);
@@ -2820,24 +2824,24 @@ ex function::normal(exmap & repl, exmap & rev_lookup,  lst & modifier) const
  *  @return normalized expression */
 ex ex::normal() const
 {
-	exmap repl, rev_lookup;
-	lst modifier;
+    exmap repl, rev_lookup;
+    lst modifier;
 
-	ex e = bp->normal(repl, rev_lookup, modifier);
-	GINAC_ASSERT(is_a<lst>(e));
+    ex e = bp->normal(repl, rev_lookup, modifier);
+    GINAC_ASSERT(is_a<lst>(e));
 
-	// Re-insert replaced symbols
-	if (!repl.empty()) {
-		for(size_t i=0; i < modifier.nops(); ++i)
-			e = e.subs(modifier.op(i), subs_options::no_pattern);
-		e = e.subs(repl, subs_options::no_pattern);
+    // Re-insert replaced symbols
+    if (!repl.empty()) {
+        for(size_t i=0; i < modifier.nops(); ++i)
+            e = e.subs(modifier.op(i), subs_options::no_pattern);
+        e = e.subs(repl, subs_options::no_pattern);
     }
     // Re-insert exp functions
     e = e.subs((repl_E),subs_options::no_pattern);
 
 
-	// Convert {numerator, denominator} form back to fraction
-	return e.op(0) / e.op(1);
+    // Convert {numerator, denominator} form back to fraction
+    return e.op(0) / e.op(1);
 }
 
 /** Get numerator of an expression. If the expression is not of the normal
@@ -2878,25 +2882,25 @@ ex ex::numer() const
  *  @return denominator */
 ex ex::denom() const
 {
-	exmap repl, rev_lookup;
-	lst modifier;
+    exmap repl, rev_lookup;
+    lst modifier;
 
-	ex e = bp->normal(repl, rev_lookup, modifier);
-	GINAC_ASSERT(is_a<lst>(e));
+    ex e = bp->normal(repl, rev_lookup, modifier);
+    GINAC_ASSERT(is_a<lst>(e));
 
     // Re-insert replaced symbols
     if (repl.empty()){
         e = e.subs((repl_E),subs_options::no_pattern);
         return e.op(1);
     }
-	else {
-		for(size_t i=0; i < modifier.nops(); ++i)
-			e = e.subs(modifier.op(i), subs_options::no_pattern);
+    else {
+        for(size_t i=0; i < modifier.nops(); ++i)
+            e = e.subs(modifier.op(i), subs_options::no_pattern);
         e=e.op(1).subs(repl, subs_options::no_pattern);
         // Re-insert exp functions
         e = e.subs((repl_E),subs_options::no_pattern);
         return e;
-	}
+    }
 }
 
 /** Get numerator and denominator of an expression. If the expression is not
@@ -2907,24 +2911,24 @@ ex ex::denom() const
  *  @return a list [numerator, denominator] */
 ex ex::numer_denom() const
 {
-	exmap repl, rev_lookup;
-	lst modifier;
+    exmap repl, rev_lookup;
+    lst modifier;
 
-	ex e = bp->normal(repl, rev_lookup, modifier);
-	GINAC_ASSERT(is_a<lst>(e));
+    ex e = bp->normal(repl, rev_lookup, modifier);
+    GINAC_ASSERT(is_a<lst>(e));
 
     // Re-insert replaced symbols
     if (repl.empty()){
         e = e.subs((repl_E),subs_options::no_pattern);
         return e;
     }
-	else {
-		for(size_t i=0; i < modifier.nops(); ++i)
-			e = e.subs(modifier.op(i), subs_options::no_pattern);
+    else {
+        for(size_t i=0; i < modifier.nops(); ++i)
+            e = e.subs(modifier.op(i), subs_options::no_pattern);
         e=e.subs(repl, subs_options::no_pattern);
         e = e.subs((repl_E),subs_options::no_pattern);
         return e;
-	}
+    }
 }
 
 

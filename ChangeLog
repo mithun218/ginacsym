@@ -2,3 +2,11 @@
 1.0.0 (30/04/2024)
 -------------------
 - First Release
+
+1.0.2 (06/08/2024)
+----------------------
+- Fix bugs in log info.
+- Improve normal method.
+- Now power_expand only expand power exponent.
+- make check command now works perfectly.
+- Improve documentation.

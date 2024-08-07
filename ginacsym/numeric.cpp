@@ -1294,6 +1294,7 @@ bool numeric::operator<=(const numeric &other) const
  *  @exception invalid_argument (complex inequality) */ 
 bool numeric::operator>(const numeric &other) const
 {
+//    std::cout<<*this<<other<<std::endl;
 	if (this->is_real() && other.is_real())
 		return (cln::the<cln::cl_R>(value) > cln::the<cln::cl_R>(other.value));
 	throw std::invalid_argument("numeric::operator>(): complex inequality");

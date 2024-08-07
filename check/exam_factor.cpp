@@ -41,7 +41,7 @@ static unsigned exam_factor1()
 {
     unsigned result = 0;
     ex e;
-    ex x=Generator.symGenerator("x");
+    ex x=generator.symGenerator("x");
     lst syms = {x};
 
     e = 1;
@@ -112,7 +112,7 @@ static unsigned exam_factor2()
 {
     unsigned result = 0;
     ex e;
-    ex x=Generator.symGenerator("x"), y=Generator.symGenerator("y"), z=Generator.symGenerator("z");
+    ex x=generator.symGenerator("x"), y=generator.symGenerator("y"), z=generator.symGenerator("z");
     lst syms = {x, y, z};
 
     e = ex("x+y", syms);
@@ -170,7 +170,7 @@ static unsigned exam_factor3()
 {
     unsigned result = 0;
     ex e;
-    ex k=Generator.symGenerator("k"), n=Generator.symGenerator("n");
+    ex k=generator.symGenerator("k"), n=generator.symGenerator("n");
     lst syms = {k, n};
 
     e = ex("1/2*(-3+3*k-n)*(-2+3*k-n)*(-1+3*k-n)",syms);
@@ -197,7 +197,7 @@ static unsigned exam_factor_content()
 {
     unsigned result = 0;
     ex e;
-    ex x=Generator.symGenerator("x"), y=Generator.symGenerator("y");
+    ex x=generator.symGenerator("x"), y=generator.symGenerator("y");
 
     // Fixed 2013-07-28 by Alexei Sheplyakov in factor_univariate().
     e = ex("174247781*x^2-1989199947807987/200000000000000", lst{x});
@@ -216,7 +216,7 @@ static unsigned exam_factor_wang()
     // "An Improved Multivariate Polynomial Factoring Algorithm"
     unsigned result = 0;
     ex e;
-    ex u=Generator.symGenerator("u"), w=Generator.symGenerator("w"), x=Generator.symGenerator("x"), y=Generator.symGenerator("y"), z=Generator.symGenerator("z");
+    ex u=generator.symGenerator("u"), w=generator.symGenerator("w"), x=generator.symGenerator("x"), y=generator.symGenerator("y"), z=generator.symGenerator("z");
 
     e = ex("(z+x*y+10)*(x*z+y+30)*(y*z+x+20)", lst{x, y, z});
     result += check_factor_expanded(e);
@@ -287,7 +287,7 @@ static unsigned exam_factor_magerya()
     // https://www.ginacsym.de/pipermail/ginacsym-list/2017-December/002162.html
     unsigned result = 0;
     ex e;
-    ex x=Generator.symGenerator("x"), y=Generator.symGenerator("y");
+    ex x=generator.symGenerator("x"), y=generator.symGenerator("y");
 
     e = (1+2*x+y)*(1+2*x-y)*(2*x-y)*(2*x+y);
     result += check_factor_expanded(e);

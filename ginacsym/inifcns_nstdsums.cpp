@@ -1976,7 +1976,7 @@ cln::cl_N S_do_sum(int n, int p, const cln::cl_N& x, const cln::float_format_t& 
 {
 	static cln::float_format_t oldprec = cln::default_float_format;
 
-	if (p==1) {
+    if (p==1) {
 		return Li_projection(n+1, x, prec);
 	}
 
@@ -1989,7 +1989,7 @@ cln::cl_N S_do_sum(int n, int p, const cln::cl_N& x, const cln::float_format_t& 
 	}
 		
 	// check if precalculated values are sufficient
-	if (p > ynsize+1) {
+    if (p > ynsize+1) {
 		for (int i=ynsize; i<p-1; i++) {
 			fill_Yn(i, prec);
 		}
@@ -2003,10 +2003,10 @@ cln::cl_N S_do_sum(int n, int p, const cln::cl_N& x, const cln::float_format_t& 
 	cln::cl_N res;
 	cln::cl_N resbuf;
 	cln::cl_N factor = cln::expt(xf, p);
-	int i = p;
+    int i = p;
 	do {
 		resbuf = res;
-		if (i-p >= ynlength) {
+        if (i-p >= ynlength) {
 			// make Yn longer
 			make_Yn_longer(ynlength*2, prec);
 		}
@@ -2014,7 +2014,7 @@ cln::cl_N S_do_sum(int n, int p, const cln::cl_N& x, const cln::float_format_t& 
 		//res = res + factor / cln::expt(cln::cl_I(i),n+1) * (*it); // should we check it? or rely on magic number? ...
 		factor = factor * xf;
 		i++;
-	} while (res != resbuf);
+    } while (res != resbuf);
 	
 	return res;
 }
@@ -2039,8 +2039,8 @@ cln::cl_N S_projection(int n, int p, const cln::cl_N& x, const cln::float_format
 		}
 
 		return result;
-	}
-	
+    }
+
 	return S_do_sum(n, p, x, prec);
 }
 
@@ -2168,12 +2168,15 @@ static ex S_evalf(const ex& n, const ex& p, const ex& x)
 		const int p_ = ex_to<numeric>(p).to_int();
 		if (is_a<numeric>(x)) {
 			const cln::cl_N x_ = ex_to<numeric>(x).to_cl_N();
-			const cln::cl_N result = S_num(n_, p_, x_);
+            const cln::cl_N result = S_num(n_, p_, x_);
+
 			return numeric(result);
 		} else {
-			ex x_val = x.evalf();
+
+            ex x_val = x.evalf();
 			if (is_a<numeric>(x_val)) {
 				const cln::cl_N x_val_ = ex_to<numeric>(x_val).to_cl_N();
+
 				const cln::cl_N result = S_num(n_, p_, x_val_);
 				return numeric(result);
 			}

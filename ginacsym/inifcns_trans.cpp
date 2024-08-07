@@ -432,10 +432,18 @@ static bool log_info(const ex & x, unsigned inf)
     case info_flags::real:
         return x.info(info_flags::positive);
     case info_flags::positive:
-        if (x>_ex1)
-            return true;
-        else if(x>_ex0 && x<_ex1)
-            return false;
+        if(x.info(info_flags::real)){
+            if (x>_ex1)
+                return true;
+            else return false;
+        }
+        else return false;
+    case info_flags::negative:
+        if(x.info(info_flags::real)){
+            if(x>_ex0 && x<_ex1)
+                return true;
+            else return false;
+        }
         else return false;
     default:
         return false;

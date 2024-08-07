@@ -879,10 +879,10 @@ ex power::power_expand(unsigned options) const
         for (auto & cit : m.seq) {
             ex e=m.recombine_pair_to_ex(cit);
             if (e.info(info_flags::positive)){
-                prodseq.push_back(pow(e, exponent).expand(options));
+                prodseq.push_back(pow(e, exponent)/*.expand(options)*/);
             }
             else if (e.info(info_flags::negative)) {
-                prodseq.push_back(pow(-e, exponent).expand(options));
+                prodseq.push_back(pow(-e, exponent)/*.expand(options)*/);
                 possign = !possign;
             } else
                 powseq.push_back(cit);
@@ -909,8 +909,8 @@ ex power::power_expand(unsigned options) const
             ex_to<basic>(basis).setflag(status_flags::purely_indefinite);
     }
 
-    const ex expanded_basis = basis.expand(options);
-    const ex expanded_exponent = exponent.expand(options);
+    const ex expanded_basis = basis/*.expand(options)*/;
+    const ex expanded_exponent = exponent/*.expand(options)*/;
 
     // x^(a+b) -> x^a * x^b
     if (is_exactly_a<add>(expanded_exponent)) {

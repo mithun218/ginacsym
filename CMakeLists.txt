@@ -284,6 +284,8 @@ IF(GINACSYM_BUILD_SHARED_LIBS)
         ginacsym/number.h
         ginacsym/poly_algebra.cpp
         ginacsym/poly_algebra.h
+        ginacsym/exam_inifcns_nstdsums.h
+
     )
     target_link_libraries(ginacsym PUBLIC ${CORELIBS})
 ENDIF()
@@ -292,9 +294,9 @@ IF(GINACSYM_BUILD_STATIC_LIBS)
     target_link_libraries(ginacsym_static PUBLIC ${CORELIBS})
 ENDIF()
 
-add_executable(ginacsym_run ginacsym/main.cpp)
-set(ginacsym_runlibs ginacsym ${CORELIBS})
-target_link_libraries(ginacsym_run PUBLIC ginacsym ${CORELIBS})
+#add_executable(ginacsym_run  ginacsym/exam_paranoia.cpp)
+#set(ginacsym_runlibs ginacsym ${CORELIBS})
+#target_link_libraries(ginacsym_run PUBLIC ginacsym ${CORELIBS})
 
 ## Testing library
 #include(CTest)
