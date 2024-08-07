@@ -68,6 +68,8 @@ In contrast to GiNaC, GinacSym has the following additional features:
 
 - functions dependent on variable (e.g. f(x))
 - Infinity
+- Limit-> inert form limit
+- limit
 - Diff-> inert form of diff
 - integrate
 - Integrate-> inert form of integrate
@@ -93,10 +95,18 @@ We intend to enhance GinacSym with numerous new features in order to build a com
 - Dirac delta, Kronecker delta functions
 - and many more.
 
-## Install
+## Installation
 To install GinacSym, we require C library  [flint >= 3.0.0](https://flintlib.org) and c++ library [CLN >= 1.3.4](http://www.ginac.de/CLN/). After installing these dependencies, we can install GinacSym using the following commands:
-```        
+```
         $ ./configure
         $ make
         $ make check
         $ make install
+        
+```
+## Contributions and bug reports
+
+Contributions to this project are very welcome.
+If you wish to contribute a new feature, you can do this by forking the ginacsym repo and creating a branch. Apply your code changes to the branch on your fork. When you're done, submit a [pull request](https://github.com/mithun218/ginacsym/pulls) to merge your fork into master branch with a tag "enhancement", and the proposed changes can be discussed there. 
+If you encounter a bug, please open a new [issue](https://github.com/mithun218/ginacsym/issues/new) on the GitHub repository to report the bug, and tag it "bug".
+Please provide sufficient information to reproduce the bug and include as much information as possible that can be helpful for fixing it.
