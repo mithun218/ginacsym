@@ -21,7 +21,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <bits/stdc++.h>
+//#include <bits/stdc++.h>
 #include "constant.h"
 #include "ex.h"
 #include "factor.h"
@@ -36,6 +36,7 @@
 #include "mul.h"
 #include "power.h"
 #include<cln/exception.h>
+#include <numeric>
 
 
 namespace ginacsym{
