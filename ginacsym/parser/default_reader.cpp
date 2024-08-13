@@ -141,7 +141,7 @@ const prototype_table& get_builtin_reader()
 			factorial,
 			binomial,
 			Order,
-			NFUNCTIONS
+            NFUNCTIONS
 		};
 		auto it = registered_functions_hack::get_registered_functions().begin();
 		unsigned serial = 0;

@@ -147,7 +147,8 @@ am_libginacsym_la_OBJECTS = libginacsym_la-add.lo \
 	libginacsym_la-factor.lo libginacsym_la-fderivative.lo \
 	libginacsym_la-function.lo libginacsym_la-idx.lo \
 	libginacsym_la-indexed.lo libginacsym_la-inifcns.lo \
-	libginacsym_la-inifcns_trans.lo \
+	libginacsym_la-inifcns_trans.lo libginacsym_la-inifcns_trig.lo \
+	libginacsym_la-inifcns_hyperb.lo libginacsym_la-inert.lo \
 	libginacsym_la-inifcns_gamma.lo \
 	libginacsym_la-inifcns_nstdsums.lo \
 	libginacsym_la-inifcns_elliptic.lo \
@@ -163,10 +164,6 @@ am_libginacsym_la_OBJECTS = libginacsym_la-add.lo \
 	libginacsym_la-tensor.lo libginacsym_la-utils.lo \
 	libginacsym_la-wildcard.lo libginacsym_la-ginacwrapper.lo \
 	libginacsym_la-infinity.lo libginacsym_la-functions.lo \
-	libginacsym_la-inifcns_trig.lo \
-	libginacsym_la-inifcns_hyperb.lo \
-	libginacsym_la-inifcns_special.lo \
-	libginacsym_la-inifcns_integral.lo libginacsym_la-inert.lo \
 	libginacsym_la-integrate.lo libginacsym_la-map_function.lo \
 	libginacsym_la-outform.lo libginacsym_la-simplify.lo \
 	libginacsym_la-solve.lo libginacsym_la-utility.lo \
@@ -239,9 +236,7 @@ am__depfiles_remade = ./$(DEPDIR)/libginacsym_la-add.Plo \
 	./$(DEPDIR)/libginacsym_la-inifcns_elliptic.Plo \
 	./$(DEPDIR)/libginacsym_la-inifcns_gamma.Plo \
 	./$(DEPDIR)/libginacsym_la-inifcns_hyperb.Plo \
-	./$(DEPDIR)/libginacsym_la-inifcns_integral.Plo \
 	./$(DEPDIR)/libginacsym_la-inifcns_nstdsums.Plo \
-	./$(DEPDIR)/libginacsym_la-inifcns_special.Plo \
 	./$(DEPDIR)/libginacsym_la-inifcns_trans.Plo \
 	./$(DEPDIR)/libginacsym_la-inifcns_trig.Plo \
 	./$(DEPDIR)/libginacsym_la-integral.Plo \
@@ -491,8 +486,11 @@ top_srcdir = @top_srcdir@
 lib_LTLIBRARIES = libginacsym.la
 libginacsym_la_SOURCES = add.cpp archive.cpp basic.cpp clifford.cpp color.cpp \
     constant.cpp ex.cpp expair.cpp expairseq.cpp exprseq.cpp \
-    fail.cpp factor.cpp fderivative.cpp function.cpp idx.cpp indexed.cpp inifcns.cpp \
-    inifcns_trans.cpp inifcns_gamma.cpp inifcns_nstdsums.cpp inifcns_elliptic.cpp integration_kernel.cpp \
+    fail.cpp factor.cpp fderivative.cpp function.cpp idx.cpp indexed.cpp inifcns.cpp inifcns_trans.cpp \
+    inifcns_trig.cpp \
+    inifcns_hyperb.cpp \
+    inert.cpp \
+    inifcns_gamma.cpp inifcns_nstdsums.cpp inifcns_elliptic.cpp integration_kernel.cpp \
     integral.cpp lst.cpp matrix.cpp mul.cpp ncmul.cpp normal.cpp numeric.cpp \
     operators.cpp power.cpp registrar.cpp relational.cpp remember.cpp \
     pseries.cpp print.cpp symbol.cpp symmetry.cpp tensor.cpp \
@@ -502,11 +500,6 @@ libginacsym_la_SOURCES = add.cpp archive.cpp basic.cpp clifford.cpp color.cpp \
 ginacwrapper.cpp\
 infinity.cpp \
 functions.cpp \
-inifcns_trig.cpp \
-inifcns_hyperb.cpp \
-inifcns_special.cpp \
-inifcns_integral.cpp \
-inert.cpp \
 integrate.cpp \
 map_function.cpp \
 outform.cpp \
@@ -750,9 +743,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libginacsym_la-inifcns_elliptic.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libginacsym_la-inifcns_gamma.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libginacsym_la-inifcns_hyperb.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libginacsym_la-inifcns_integral.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libginacsym_la-inifcns_nstdsums.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libginacsym_la-inifcns_special.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libginacsym_la-inifcns_trans.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libginacsym_la-inifcns_trig.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libginacsym_la-integral.Plo@am__quote@ # am--include-marker
@@ -960,6 +951,27 @@ libginacsym_la-inifcns_trans.lo: inifcns_trans.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libginacsym_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libginacsym_la-inifcns_trans.lo `test -f 'inifcns_trans.cpp' || echo '$(srcdir)/'`inifcns_trans.cpp
 
+libginacsym_la-inifcns_trig.lo: inifcns_trig.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libginacsym_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libginacsym_la-inifcns_trig.lo -MD -MP -MF $(DEPDIR)/libginacsym_la-inifcns_trig.Tpo -c -o libginacsym_la-inifcns_trig.lo `test -f 'inifcns_trig.cpp' || echo '$(srcdir)/'`inifcns_trig.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libginacsym_la-inifcns_trig.Tpo $(DEPDIR)/libginacsym_la-inifcns_trig.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='inifcns_trig.cpp' object='libginacsym_la-inifcns_trig.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libginacsym_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libginacsym_la-inifcns_trig.lo `test -f 'inifcns_trig.cpp' || echo '$(srcdir)/'`inifcns_trig.cpp
+
+libginacsym_la-inifcns_hyperb.lo: inifcns_hyperb.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libginacsym_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libginacsym_la-inifcns_hyperb.lo -MD -MP -MF $(DEPDIR)/libginacsym_la-inifcns_hyperb.Tpo -c -o libginacsym_la-inifcns_hyperb.lo `test -f 'inifcns_hyperb.cpp' || echo '$(srcdir)/'`inifcns_hyperb.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libginacsym_la-inifcns_hyperb.Tpo $(DEPDIR)/libginacsym_la-inifcns_hyperb.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='inifcns_hyperb.cpp' object='libginacsym_la-inifcns_hyperb.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libginacsym_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libginacsym_la-inifcns_hyperb.lo `test -f 'inifcns_hyperb.cpp' || echo '$(srcdir)/'`inifcns_hyperb.cpp
+
+libginacsym_la-inert.lo: inert.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libginacsym_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libginacsym_la-inert.lo -MD -MP -MF $(DEPDIR)/libginacsym_la-inert.Tpo -c -o libginacsym_la-inert.lo `test -f 'inert.cpp' || echo '$(srcdir)/'`inert.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libginacsym_la-inert.Tpo $(DEPDIR)/libginacsym_la-inert.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='inert.cpp' object='libginacsym_la-inert.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libginacsym_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libginacsym_la-inert.lo `test -f 'inert.cpp' || echo '$(srcdir)/'`inert.cpp
+
 libginacsym_la-inifcns_gamma.lo: inifcns_gamma.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libginacsym_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libginacsym_la-inifcns_gamma.lo -MD -MP -MF $(DEPDIR)/libginacsym_la-inifcns_gamma.Tpo -c -o libginacsym_la-inifcns_gamma.lo `test -f 'inifcns_gamma.cpp' || echo '$(srcdir)/'`inifcns_gamma.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libginacsym_la-inifcns_gamma.Tpo $(DEPDIR)/libginacsym_la-inifcns_gamma.Plo
@@ -1141,41 +1153,6 @@ libginacsym_la-functions.lo: functions.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='functions.cpp' object='libginacsym_la-functions.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libginacsym_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libginacsym_la-functions.lo `test -f 'functions.cpp' || echo '$(srcdir)/'`functions.cpp
-
-libginacsym_la-inifcns_trig.lo: inifcns_trig.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libginacsym_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libginacsym_la-inifcns_trig.lo -MD -MP -MF $(DEPDIR)/libginacsym_la-inifcns_trig.Tpo -c -o libginacsym_la-inifcns_trig.lo `test -f 'inifcns_trig.cpp' || echo '$(srcdir)/'`inifcns_trig.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libginacsym_la-inifcns_trig.Tpo $(DEPDIR)/libginacsym_la-inifcns_trig.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='inifcns_trig.cpp' object='libginacsym_la-inifcns_trig.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libginacsym_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libginacsym_la-inifcns_trig.lo `test -f 'inifcns_trig.cpp' || echo '$(srcdir)/'`inifcns_trig.cpp
-
-libginacsym_la-inifcns_hyperb.lo: inifcns_hyperb.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libginacsym_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libginacsym_la-inifcns_hyperb.lo -MD -MP -MF $(DEPDIR)/libginacsym_la-inifcns_hyperb.Tpo -c -o libginacsym_la-inifcns_hyperb.lo `test -f 'inifcns_hyperb.cpp' || echo '$(srcdir)/'`inifcns_hyperb.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libginacsym_la-inifcns_hyperb.Tpo $(DEPDIR)/libginacsym_la-inifcns_hyperb.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='inifcns_hyperb.cpp' object='libginacsym_la-inifcns_hyperb.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libginacsym_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libginacsym_la-inifcns_hyperb.lo `test -f 'inifcns_hyperb.cpp' || echo '$(srcdir)/'`inifcns_hyperb.cpp
-
-libginacsym_la-inifcns_special.lo: inifcns_special.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libginacsym_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libginacsym_la-inifcns_special.lo -MD -MP -MF $(DEPDIR)/libginacsym_la-inifcns_special.Tpo -c -o libginacsym_la-inifcns_special.lo `test -f 'inifcns_special.cpp' || echo '$(srcdir)/'`inifcns_special.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libginacsym_la-inifcns_special.Tpo $(DEPDIR)/libginacsym_la-inifcns_special.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='inifcns_special.cpp' object='libginacsym_la-inifcns_special.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libginacsym_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libginacsym_la-inifcns_special.lo `test -f 'inifcns_special.cpp' || echo '$(srcdir)/'`inifcns_special.cpp
-
-libginacsym_la-inifcns_integral.lo: inifcns_integral.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libginacsym_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libginacsym_la-inifcns_integral.lo -MD -MP -MF $(DEPDIR)/libginacsym_la-inifcns_integral.Tpo -c -o libginacsym_la-inifcns_integral.lo `test -f 'inifcns_integral.cpp' || echo '$(srcdir)/'`inifcns_integral.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libginacsym_la-inifcns_integral.Tpo $(DEPDIR)/libginacsym_la-inifcns_integral.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='inifcns_integral.cpp' object='libginacsym_la-inifcns_integral.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libginacsym_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libginacsym_la-inifcns_integral.lo `test -f 'inifcns_integral.cpp' || echo '$(srcdir)/'`inifcns_integral.cpp
-
-libginacsym_la-inert.lo: inert.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libginacsym_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libginacsym_la-inert.lo -MD -MP -MF $(DEPDIR)/libginacsym_la-inert.Tpo -c -o libginacsym_la-inert.lo `test -f 'inert.cpp' || echo '$(srcdir)/'`inert.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libginacsym_la-inert.Tpo $(DEPDIR)/libginacsym_la-inert.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='inert.cpp' object='libginacsym_la-inert.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libginacsym_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libginacsym_la-inert.lo `test -f 'inert.cpp' || echo '$(srcdir)/'`inert.cpp
 
 libginacsym_la-integrate.lo: integrate.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libginacsym_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libginacsym_la-integrate.lo -MD -MP -MF $(DEPDIR)/libginacsym_la-integrate.Tpo -c -o libginacsym_la-integrate.lo `test -f 'integrate.cpp' || echo '$(srcdir)/'`integrate.cpp
@@ -1557,9 +1534,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/libginacsym_la-inifcns_elliptic.Plo
 	-rm -f ./$(DEPDIR)/libginacsym_la-inifcns_gamma.Plo
 	-rm -f ./$(DEPDIR)/libginacsym_la-inifcns_hyperb.Plo
-	-rm -f ./$(DEPDIR)/libginacsym_la-inifcns_integral.Plo
 	-rm -f ./$(DEPDIR)/libginacsym_la-inifcns_nstdsums.Plo
-	-rm -f ./$(DEPDIR)/libginacsym_la-inifcns_special.Plo
 	-rm -f ./$(DEPDIR)/libginacsym_la-inifcns_trans.Plo
 	-rm -f ./$(DEPDIR)/libginacsym_la-inifcns_trig.Plo
 	-rm -f ./$(DEPDIR)/libginacsym_la-integral.Plo
@@ -1679,9 +1654,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/libginacsym_la-inifcns_elliptic.Plo
 	-rm -f ./$(DEPDIR)/libginacsym_la-inifcns_gamma.Plo
 	-rm -f ./$(DEPDIR)/libginacsym_la-inifcns_hyperb.Plo
-	-rm -f ./$(DEPDIR)/libginacsym_la-inifcns_integral.Plo
 	-rm -f ./$(DEPDIR)/libginacsym_la-inifcns_nstdsums.Plo
-	-rm -f ./$(DEPDIR)/libginacsym_la-inifcns_special.Plo
 	-rm -f ./$(DEPDIR)/libginacsym_la-inifcns_trans.Plo
 	-rm -f ./$(DEPDIR)/libginacsym_la-inifcns_trig.Plo
 	-rm -f ./$(DEPDIR)/libginacsym_la-integral.Plo

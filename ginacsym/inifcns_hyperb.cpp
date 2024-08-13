@@ -23,25 +23,23 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+
 #include "inifcns.h"
 #include "ex.h"
 #include "constant.h"
-#include "infinity.h"
-#include "numeric.h"
 #include "mul.h"
-#include "add.h"
 #include "power.h"
 #include "operators.h"
 #include "relational.h"
-#include "symbol.h"
 #include "pseries.h"
+#include "symbol.h"
 #include "utils.h"
+#include "infinity.h"
+#include "add.h"
+#include "mul.h"
 
-#include <vector>
 #include <stdexcept>
-#include <sstream>
 #include <string>
-#include <memory>
 
 namespace ginacsym {
 

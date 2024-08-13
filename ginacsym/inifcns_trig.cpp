@@ -23,14 +23,16 @@
 #include "inifcns.h"
 #include "ex.h"
 #include "constant.h"
-#include "infinity.h"
-#include "symbol.h"
 #include "mul.h"
 #include "power.h"
 #include "operators.h"
+#include "relational.h"
 #include "pseries.h"
+#include "symbol.h"
 #include "utils.h"
+#include "infinity.h"
 #include "add.h"
+#include "mul.h"
 
 namespace ginacsym {
 

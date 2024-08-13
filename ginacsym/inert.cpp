@@ -21,21 +21,27 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "inert.h"
-#include "add.h"
-#include "fail.h"
-#include "functions.h"
-#include "limit.h"
-#include "mul.h"
-#include "ginacwrapper.h"
-#include "normal.h"
-#include "utils.h"
-#include "wildcard.h"
 #include "inifcns.h"
-#include "simplify.h"
-#include "integrate.h"
 #include "ex.h"
-#include "utility.h"
+#include "constant.h"
+#include "mul.h"
+#include "power.h"
+#include "operators.h"
+#include "relational.h"
+#include "pseries.h"
+#include "symbol.h"
+#include "utils.h"
+#include "infinity.h"
+#include "add.h"
+#include "mul.h"
+
+#include "inert.h"
+#include "fail.h"
+#include "ginacwrapper.h"
+#include "simplify.h"
+#include "functions.h"
+#include "integrate.h"
+#include "limit.h"
 
 
 namespace ginacsym {

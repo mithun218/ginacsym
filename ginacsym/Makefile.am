@@ -3,8 +3,11 @@
 lib_LTLIBRARIES = libginacsym.la
 libginacsym_la_SOURCES = add.cpp archive.cpp basic.cpp clifford.cpp color.cpp \
     constant.cpp ex.cpp expair.cpp expairseq.cpp exprseq.cpp \
-    fail.cpp factor.cpp fderivative.cpp function.cpp idx.cpp indexed.cpp inifcns.cpp \
-    inifcns_trans.cpp inifcns_gamma.cpp inifcns_nstdsums.cpp inifcns_elliptic.cpp integration_kernel.cpp \
+    fail.cpp factor.cpp fderivative.cpp function.cpp idx.cpp indexed.cpp inifcns.cpp inifcns_trans.cpp \
+    inifcns_trig.cpp \
+    inifcns_hyperb.cpp \
+    inert.cpp \
+    inifcns_gamma.cpp inifcns_nstdsums.cpp inifcns_elliptic.cpp integration_kernel.cpp \
     integral.cpp lst.cpp matrix.cpp mul.cpp ncmul.cpp normal.cpp numeric.cpp \
     operators.cpp power.cpp registrar.cpp relational.cpp remember.cpp \
     pseries.cpp print.cpp symbol.cpp symmetry.cpp tensor.cpp \
@@ -14,11 +17,6 @@ libginacsym_la_SOURCES = add.cpp archive.cpp basic.cpp clifford.cpp color.cpp \
 ginacwrapper.cpp\
 infinity.cpp \
 functions.cpp \
-inifcns_trig.cpp \
-inifcns_hyperb.cpp \
-inifcns_special.cpp \
-inifcns_integral.cpp \
-inert.cpp \
 integrate.cpp \
 map_function.cpp \
 outform.cpp \
