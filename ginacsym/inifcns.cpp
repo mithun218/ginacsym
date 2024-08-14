@@ -3034,4 +3034,10 @@ REGISTER_FUNCTION(sn, dummy())
 REGISTER_FUNCTION(cn, dummy())
 REGISTER_FUNCTION(dn, dummy())
 
+///////////
+/// Helper functions to parse Diff,Integrate
+///////////
+REGISTER_FUNCTION(Diff_helper,dummy())
+REGISTER_FUNCTION(Integrate_helper,dummy())
+
 } // namespace ginacsym

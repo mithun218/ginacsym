@@ -294,8 +294,7 @@ IF(GINACSYM_BUILD_STATIC_LIBS)
     target_link_libraries(ginacsym_static PUBLIC ${CORELIBS})
 ENDIF()
 
-#add_executable(ginacsym_run
-    ginacsym/main.cpp  )
+#add_executable(ginacsym_run ginacsym/main.cpp  )
 #set(ginacsym_runlibs ginacsym ${CORELIBS})
 #target_link_libraries(ginacsym_run PUBLIC ginacsym ${CORELIBS})
 

@@ -23,7 +23,9 @@
 #include "ginacwrapper.h"
 #include "parser.h"
 #include "symbol.h"
-
+#include "inert.h"
+#include "inifcns.h"
+#include "wildcard.h"
 
 
 namespace ginacsym {
@@ -95,10 +97,48 @@ ex& generatorc::symGenerator(const std::string& s, unsigned symboltype, const bo
     throw ginacsym::unsupported_symbol();
 }
 
+//It replace Diff_helper, Integrate_helper to Diff, Integrate
+class replace_extented_classc: public map_function{
+public:
+    replace_extented_classc(){}
+    ex expr_visitor(const ex& e){
+        if(is_ex_the_function(e,Diff_helper)){
+            return Diff(e.op(0),e.op(1),e.op(2));
+        }
+        else if(is_ex_the_function(e,Integrate_helper)){
+            return Integrate(e.op(0),e.op(1));
+        }
+        else return e.map(*this);
+    }
+};
+replace_extented_classc replace_extented_class;
 //This will generate ex and also create the missing symbols
-ex generatorc::exGenerator(const std::string& s, unsigned symboltype, const bool& islatexname)
+ex generatorc::exGenerator(const std::string& s_, unsigned symboltype, const bool& islatexname)
 {
     try{
+        std::string s=s_;
+        //Enabling parsing of some extended classes, such as Diff,Integrate
+        //list of classes at the begining of expression
+        std::vector<std::string> classListBegin ={"Diff(","Integrate("};
+        for (int var = 0; var < classListBegin.size(); ++var) {
+            std::string bstring=s.substr(0,classListBegin[var].size());
+            if ((bstring)==classListBegin[var]) {
+                bstring = bstring.substr(0,bstring.size()-1);
+                s.replace(0,bstring.size(),bstring+"_helper");
+            }
+        }
+        //list of classes inside expressions
+        std::vector<std::string> classListInside = {"(Diff(","+Diff(","-Diff(","*Diff(","/Diff(","^Diff(",
+                                              "(Integrate(","+Integrate(","-Integrate(","*Integrate(","/Integrate(","^Integrate("};
+        for (int var = 0; var < classListInside.size(); ++var) {
+            size_t pos=s.find(classListInside[var]);
+            while (pos!=std::string::npos) {
+                std::string newString=classListInside[var].substr(0,classListInside[var].size()-1)+"_helper";
+                s.replace(pos,classListInside[var].size()-1,newString);
+                pos=s.find(classListInside[var],pos+newString.size()+1);
+            }
+        }
+
         if (symboldirectory.find(s)!=symboldirectory.end()){//s is symbol and aready present
             if(symboltypes[s]!=symboltype){// symboltype is not same
                                             //update symboldirectory and symboltypes
@@ -160,7 +200,11 @@ ex generatorc::exGenerator(const std::string& s, unsigned symboltype, const bool
             }
         }
         parser reader1(symboldirectory);
-        return reader1(s);
+        if(s==s_)
+            return reader1(s);
+        else{
+            return replace_extented_class.expr_visitor(reader1(s));
+        }
     }
     catch(...){ ginacsym::unexpected_error();}
     throw ginacsym::unexpected_error();;
