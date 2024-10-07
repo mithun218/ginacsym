@@ -418,31 +418,29 @@ ex power::eval() const
     }
 
     // ^(x, \infty)
-    if (is_exactly_a<infinity>(exponent)) {   
-        //0^Infinity=0
-        if (basis.is_zero() && exponent.info(info_flags::positive)) {
+    if (is_exactly_a<infinity>(exponent)) {
+        //0^abs(Infinity)=0
+        if (basis.is_zero()) {
             return _ex0;
         }
-        //0^-Infinity=complexinfinity(this is not supported)
-        else if(basis.is_zero() && exponent.info(info_flags::negative)){
-            throw(std::domain_error("power::eval(): pow(0,-Infinity) is encountered."));
-        }
-        // x^(oo)
-        if (exponent.info(info_flags::positive)) {
-            if (basis.evalf() > _ex1)
-                return Infinity;
-            else if (basis.evalf() > _ex0) return _ex0;
-        }
-        else {
-            if (basis.evalf() > _ex1)
-                return _ex0;
-            else if (basis.evalf() > _ex0) return Infinity;
-        }
-
-
+        //abs(1)^abs(Infinity)=indeterminate
         if (abs(basis) == _ex1)
             throw(indeterminate_error("indeterminate expression: "
                                       "power::eval(): pow(1,Infinity) is encountered."));
+
+        // x^(oo)
+        if (exponent.info(info_flags::positive)) {
+            if (abs(basis.evalf()) > _ex1)
+                return Infinity;
+            else if (_ex1>abs(basis.evalf()) > _ex0) return _ex0;
+        }
+        else {
+            if (abs(basis.evalf()) > _ex1)
+                return _ex0;
+            else if (_ex1>abs(basis.evalf())>_ex0) return Infinity;
+        }
+
+
         throw(std::domain_error("power::eval(): pow(c,Infinity) is encountered."));
     }
 	
@@ -493,7 +491,8 @@ ex power::eval() const
     //Turn (n*a*b)^p into n^p*(a*b)^p where n is numeric (by me)
     if(is_exactly_a<mul>(basis) and !is_number(basis)){
         for (int i = 0; i <(basis).nops(); ++i) {
-            if ((is_number(basis.op(i)) and !basis.op(i).is_equal(_ex_1))) {
+            if (((is_number(basis.op(i)) or basis.op(i).info(info_flags::positive))
+                and !basis.op(i).is_equal(_ex_1))) {
                 if(basis.op(i).info(info_flags::positive))
                     return pow(basis.op(i),exponent)*pow(basis/basis.op(i),exponent);
                 else if(basis.op(i).info(info_flags::negative))

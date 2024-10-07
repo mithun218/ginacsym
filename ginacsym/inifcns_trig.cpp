@@ -55,7 +55,7 @@ static bool has_pi(const ex & the_ex) {
 static bool is_multiple_of_I(const ex & the_ex)
 {
 
-	if (is_exactly_a<numeric>(the_ex)
+    if (is_exactly_a<numeric>(the_ex) and !the_ex.is_equal(_ex0)
 	    and the_ex.real_part().is_zero())
 		return true;
 
@@ -1058,8 +1058,8 @@ static ex csc_evalf(const ex & x)
 static ex csc_eval(const ex & x)
 {
 
-	if (is_multiple_of_I(x.expand()))
-		return -I*csch(x/I);
+    if (is_multiple_of_I(x.expand()))
+        return -I*csch(x/I);
 
 	if (is_exactly_a<function>(x)) {
 		const ex &t = x.op(0);

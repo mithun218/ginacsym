@@ -838,7 +838,7 @@ REGISTER_FUNCTION(asinh, evalf_func(asinh_evalf).
                          info_func(tanh_info).
                          derivative_func(asinh_deriv).
                          conjugate_func(asinh_conjugate).
-			 set_name("arcsinh"));
+                         set_name("arcsinh"));
 
 //////////
 // inverse hyperbolic cosine (trigonometric function)

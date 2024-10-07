@@ -75,7 +75,7 @@ function_options::~function_options()
 
 void function_options::initialize()
 {
-	set_name("unnamed_function", "\\mbox{unnamed}");
+    set_name("unnamed_function", "\\operatorname{unnamed}");
 	nparams = 0;
 	eval_f = evalf_f = real_part_f = imag_part_f = conjugate_f = expand_f
         = derivative_f = expl_derivative_f = power_f = series_f= subs_f = nullptr;
@@ -104,7 +104,7 @@ function_options & function_options::set_name(std::string const & n,
 {
 	name = n;
 	if (tn==std::string())
-		TeX_name = "\\mbox{"+name+"}";
+        TeX_name = "\\operatorname{"+name+"}";
 	else
 		TeX_name = tn;
 	return *this;
@@ -1977,7 +1977,7 @@ ex function::derivative(const symbol & s) const
 	try {
 		// Explicit derivation
 		result = expl_derivative(s);
-	} catch (...) {
+    } catch (...) {
 		// Chain rule
 		ex arg_diff;
 		size_t num = seq.size();
@@ -2122,10 +2122,10 @@ ex function::pderivative(unsigned diff_param) const // partial differentiation
 
 ex function::expl_derivative(const symbol & s) const // explicit differentiation
 {
-	GINAC_ASSERT(serial<registered_functions().size());
-	const function_options &opt = registered_functions()[serial];
+    GINAC_ASSERT(serial<registered_functions().size());
+    const function_options &opt = registered_functions()[serial];
 
-	if (opt.expl_derivative_f) {
+    if (opt.expl_derivative_f) {
 		// Invoke the defined explicit derivative function.
 		current_serial = serial;
 		if (opt.expl_derivative_use_exvector_args)
@@ -2162,9 +2162,9 @@ ex function::expl_derivative(const symbol & s) const // explicit differentiation
 				return ((expl_derivative_funcp_14)(opt.expl_derivative_f))(seq[0], seq[1], seq[2], seq[3], seq[4], seq[5], seq[6], seq[7], seq[8], seq[9], seq[10], seq[11], seq[12], seq[13], s);
 			// end of generated lines
 		}
-	}
-	// There is no fallback for explicit derivative.
-	throw(std::logic_error("function::expl_derivative(): explicit derivation is called, but no such function defined"));
+    }
+    // There is no fallback for explicit derivative.
+    throw(std::logic_error("function::expl_derivative(): explicit derivation is called, but no such function defined"));
 }
 
 ex function::power(const ex & power_param) const // power of function

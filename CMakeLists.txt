@@ -11,7 +11,7 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.13)
 project(ginacsym)
 
 INCLUDE(GNUInstallDirs)
@@ -65,8 +65,8 @@ install( FILES ${CMAKE_BINARY_DIR}/ginacsym.pc DESTINATION lib/pkgconfig )
 # so that we will find version.h
 include_directories("${PROJECT_BINARY_DIR}")
 
-OPTION(GINACSYM_BUILD_SHARED_LIBS "Build GINACSYM shared library." ON)
-OPTION(GINACSYM_BUILD_STATIC_LIBS "Build GINACSYM static library." OFF)
+OPTION(GINACSYM_BUILD_SHARED_LIBS "Build GINACSYM shared library." OFF)
+OPTION(GINACSYM_BUILD_STATIC_LIBS "Build GINACSYM static library." ON)
 OPTION(GINACSYM_fPIC_BUILD "Build GINACSYM setting POSITION_INDEPENDENT_CODE." ON)
 
 set (CMAKE_CXX_STANDARD 17)
@@ -203,8 +203,6 @@ SET(GINACSYM_HEADERS
     ginacsym/function.h
     ginacsym/functions.h
     ginacsym/ginacsym.h
-    ginacsym/ginacsympy.h
-    ginacsym/ginacsympy_api.h
     ginacsym/ginacwrapper.h
     ginacsym/hash_map.h
     ginacsym/hash_seed.h
@@ -282,21 +280,22 @@ IF(GINACSYM_BUILD_SHARED_LIBS)
         ginacsym/limit.h
         ginacsym/number.cpp
         ginacsym/number.h
-        ginacsym/poly_algebra.cpp
-        ginacsym/poly_algebra.h
-        ginacsym/exam_inifcns_nstdsums.h
-
     )
     target_link_libraries(ginacsym PUBLIC ${CORELIBS})
 ENDIF()
 IF(GINACSYM_BUILD_STATIC_LIBS)
     ADD_LIBRARY(ginacsym_static STATIC ${GINACSYM_SRCS} ${GINACSYM_HEADERS})
+    target_compile_options(ginacsym_static PUBLIC "-fexceptions")
+    target_link_options(ginacsym_static PUBLIC "-fexceptions")
     target_link_libraries(ginacsym_static PUBLIC ${CORELIBS})
 ENDIF()
 
-#add_executable(ginacsym_run ginacsym/main.cpp  )
+
+#add_executable(ginacsym_run
+#    ginacsym/main.cpp  )
 #set(ginacsym_runlibs ginacsym ${CORELIBS})
 #target_link_libraries(ginacsym_run PUBLIC ginacsym ${CORELIBS})
+
 
 ## Testing library
 #include(CTest)
@@ -331,9 +330,9 @@ ENDIF()
 # Installing library
 IF(GINACSYM_BUILD_SHARED_LIBS)
     install (TARGETS ginacsym
-             RUNTIME DESTINATION bin 
+             RUNTIME DESTINATION bin
              LIBRARY DESTINATION lib
-	     ARCHIVE DESTINATION lib)
+             ARCHIVE DESTINATION lib)
 ENDIF()
 IF(GINACSYM_BUILD_STATIC_LIBS)
     install (TARGETS ginacsym_static DESTINATION lib)
