@@ -10,3 +10,8 @@
 - Now power_expand only expand power exponent.
 - make check command now works perfectly.
 - Improve documentation.
+
+1.0.3 (07/10/2024)
+----------------------
+- Now Limit and Diff can be parsed from string
+- Fixed bugs of Infinity
